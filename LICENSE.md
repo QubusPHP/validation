@@ -1,7 +1,9 @@
 The MIT License (MIT)
 
 Original work Copyright (c) 2016 Taylor Otwell <taylor@laravel.com>
+
 Modified work Copyright (c) 2016 overtrue <i@overtrue.me>
+
 Modified work Copyright (c) 2020 Joshua Parker <josh@joshuaparker.blog>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
