@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Qubus\Validation
+ *
+ * @link       https://github.com/QubusPHP/validation
+ * @copyright  2020 Joshua Parker
+ * @license    https://opensource.org/licenses/mit-license.php MIT License
+ *
+ * @since      1.0.0
+ */
+
 declare(strict_types=1);
 
 namespace Qubus\Validation;
@@ -44,10 +54,10 @@ use function mb_strlen;
 use function method_exists;
 use function pathinfo;
 use function preg_match;
-use function Qubus\Validation\array_dot;
-use function Qubus\Validation\array_get;
-use function Qubus\Validation\snake_case;
-use function Qubus\Validation\studly_case;
+use function Qubus\Support\Helpers\array_dot;
+use function Qubus\Support\Helpers\return_array;
+use function Qubus\Support\Helpers\snake_case;
+use function Qubus\Support\Helpers\studly_case;
 use function str_getcsv;
 use function str_replace;
 use function strlen;
@@ -289,7 +299,7 @@ class Validator implements Validatable
      */
     public function each(string $attribute, $rules)
     {
-        $data = array_get($this->data, $attribute);
+        $data = return_array($this->data, $attribute);
 
         if (! is_array($data)) {
             if ($this->hasRule($attribute, 'Array')) {
@@ -386,9 +396,9 @@ class Validator implements Validatable
      */
     protected function getValue(string $attribute)
     {
-        if (null !== ($value = array_get($this->data, $attribute))) {
+        if (null !== ($value = return_array($this->data, $attribute))) {
             return $value;
-        } elseif (null !== ($value = array_get($this->files, $attribute))) {
+        } elseif (null !== ($value = return_array($this->files, $attribute))) {
             return $value;
         }
     }
@@ -607,7 +617,7 @@ class Validator implements Validatable
     {
         $this->requireParameterCount(2, $parameters, 'required_if');
 
-        $data = array_get($this->data, $parameters[0]);
+        $data = return_array($this->data, $parameters[0]);
 
         $values = array_slice($parameters, 1);
 
@@ -629,7 +639,7 @@ class Validator implements Validatable
         $count = 0;
 
         foreach ($attributes as $key) {
-            if (array_get($this->data, $key) || array_get($this->files, $key)) {
+            if (return_array($this->data, $key) || return_array($this->files, $key)) {
                 ++$count;
             }
         }
@@ -657,7 +667,7 @@ class Validator implements Validatable
     {
         $this->requireParameterCount(1, $parameters, 'same');
 
-        $other = array_get($this->data, $parameters[0]);
+        $other = return_array($this->data, $parameters[0]);
 
         return isset($other) && $value === $other;
     }
@@ -672,7 +682,7 @@ class Validator implements Validatable
     {
         $this->requireParameterCount(1, $parameters, 'different');
 
-        $other = array_get($this->data, $parameters[0]);
+        $other = return_array($this->data, $parameters[0]);
 
         return isset($other) && $value !== $other;
     }
@@ -836,7 +846,7 @@ class Validator implements Validatable
         // is the size. If it is a file, we take kilobytes, and for a string the
         // entire length of the string will be considered the attribute size.
         if (is_numeric($value) && $hasNumeric) {
-            return array_get($this->data, $attribute);
+            return return_array($this->data, $attribute);
         } elseif (is_array($value)) {
             return count($value);
         } elseif (in_array($value, $_FILES, true)) {
@@ -1689,7 +1699,7 @@ class Validator implements Validatable
      */
     protected function replaceRequiredIf(string $message, string $attribute, string $rule, array $parameters)
     {
-        $parameters[1] = $this->getDisplayableValue($parameters[0], array_get($this->data, $parameters[0]));
+        $parameters[1] = $this->getDisplayableValue($parameters[0], return_array($this->data, $parameters[0]));
 
         $parameters[0] = $this->getAttribute($parameters[0]);
 
@@ -1812,7 +1822,7 @@ class Validator implements Validatable
      */
     protected function parseArrayRule($rules)
     {
-        return [studly_case(trim(array_get($rules, 0))), array_slice($rules, 1)];
+        return [studly_case(trim(return_array($rules, 0))), array_slice($rules, 1)];
     }
 
     /**
