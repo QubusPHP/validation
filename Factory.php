@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Qubus\Validation
+ *
+ * @link       https://github.com/QubusPHP/validation
+ * @copyright  2020 Joshua Parker
+ * @license    https://opensource.org/licenses/mit-license.php MIT License
+ *
+ * @since      1.0.0
+ */
+
 declare(strict_types=1);
 
 namespace Qubus\Validation;
@@ -11,7 +21,7 @@ use Qubus\Validation\Translators\StringTranslator;
 use Qubus\Validation\Validator;
 
 use function call_user_func;
-use function Qubus\Validation\snake_case;
+use function Qubus\Support\Helpers\snake_case;
 
 class Factory
 {
