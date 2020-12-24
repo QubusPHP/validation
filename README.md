@@ -5,10 +5,23 @@ This is a fork of [overtrue/validation](https://github.com/overtrue/validation),
 
 This validation library is designed to make it more convenient for you to complete data validation in any project or framework.
 
+## Requirements
+* PHP 7.4+
+
+## Installation
+
+Install via composer.
+
+```bash
+$ composer require qubus/validation
+```
+
 # Usage
 
 ```php
 <?php
+
+require('vendor/autoload.php');
 
 use Qubus\Validation\Translators\DefaultTranslator;
 use Qubus\Validation\Factory as ValidatorFactory;
@@ -76,5 +89,4 @@ $validator = $factory->make($input, $rules, $messages, $attributes);
 ```
 
 # License
-
-MIT [License](https://opensource.org/licenses/MIT).
+Released under the MIT [License](https://opensource.org/licenses/MIT).
