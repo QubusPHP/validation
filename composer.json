@@ -10,7 +10,6 @@
     ],
     "require": {
         "php": "^7.4",
-        "qubus/exception": "^1.2",
         "qubus/support": "^1.0"
     },
     "require-dev": {
