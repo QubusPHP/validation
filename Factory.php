@@ -11,7 +11,7 @@ use Qubus\Validation\Translators\StringTranslator;
 use Qubus\Validation\Validator;
 
 use function call_user_func;
-use function Qubus\Validation\snake_case;
+use function Qubus\Support\Helpers\snake_case;
 
 class Factory
 {

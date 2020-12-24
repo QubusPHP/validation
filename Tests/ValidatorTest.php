@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Qubus\Test\Validation;
+namespace Qubus\Tests\Validation;
 
 use PHPUnit\Framework\TestCase;
 use Qubus\Validation\Factory;

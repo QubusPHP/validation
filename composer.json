@@ -10,7 +10,8 @@
     ],
     "require": {
         "php": "^7.4",
-        "qubus/exception": "^1.1"
+        "qubus/exception": "^1.2",
+        "qubus/support": "^1.0"
     },
     "require-dev": {
         "laminas/laminas-coding-standard": "^2.1",
@@ -22,14 +23,11 @@
     "autoload": {
         "psr-4": {
             "Qubus\\Validation\\": ""
-        },
-        "files": [
-            "helpers.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "Qubus\\Test\\Validation\\": "Tests/"
+            "Qubus\\Tests\\Validation\\": "Tests/"
         }
     },
     "scripts": {

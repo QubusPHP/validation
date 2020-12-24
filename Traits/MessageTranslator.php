@@ -8,7 +8,7 @@ use function array_key_exists;
 use function array_merge;
 use function explode;
 use function is_array;
-use function Qubus\Validation\value;
+use function Qubus\Support\Helpers\value;
 
 trait MessageTranslator
 {
