@@ -20,7 +20,7 @@ use function explode;
 use function is_array;
 use function Qubus\Support\Helpers\value;
 
-trait MessageTranslator
+trait MessageTranslatorAware
 {
     /** @var array $messages */
     protected array $messages = [];
