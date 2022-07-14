@@ -862,7 +862,7 @@ class Validator implements Validatable
      * @param string $value
      * @return int
      */
-    protected function getStringSize($value)
+    protected function getStringSize($value): int
     {
         if (function_exists('mb_strlen')) {
             return mb_strlen((string) $value);
