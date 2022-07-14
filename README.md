@@ -6,7 +6,7 @@ This is a fork of [overtrue/validation](https://github.com/overtrue/validation),
 This validation library is designed to make it more convenient for you to complete data validation in any project or framework.
 
 ## Requirements
-* PHP 8.0+
+* PHP 8.1+
 
 ## Installation
 

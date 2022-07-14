@@ -57,9 +57,9 @@ class MessageBag implements Countable, JsonSerializable
     /**
      * Add a message to the bag.
      *
-     * @return $this
+     * @return self
      */
-    public function add(string $key, string $message)
+    public function add(string $key, string $message): self
     {
         if ($this->isUnique($key, $message)) {
             $this->messages[$key][] = $message;
@@ -72,9 +72,9 @@ class MessageBag implements Countable, JsonSerializable
      * Merge a new array of messages into the bag.
      *
      * @param array $messages
-     * @return $this
+     * @return self
      */
-    public function merge(array $messages)
+    public function merge(array $messages): self
     {
         $this->messages = array_merge_recursive($this->messages, $messages);
 
