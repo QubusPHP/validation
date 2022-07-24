@@ -55,6 +55,8 @@ use function method_exists;
 use function pathinfo;
 use function preg_match;
 use function Qubus\Support\Helpers\array_dot;
+use function Qubus\Support\Helpers\is_false__;
+use function Qubus\Support\Helpers\is_null__;
 use function Qubus\Support\Helpers\return_array;
 use function Qubus\Support\Helpers\snake_case;
 use function Qubus\Support\Helpers\studly_case;
@@ -111,7 +113,7 @@ class Validator implements Validatable
     /**
      * The files under validation.
      *
-     * @var array $fiules
+     * @var array $files
      */
     protected array $files = [];
 
@@ -488,7 +490,7 @@ class Validator implements Validatable
      */
     protected function validateRequired(string $attribute, $value): bool
     {
-        if (null === $value) {
+        if (is_null__($value)) {
             return false;
         } elseif (is_string($value) && trim($value) === '') {
             return false;
@@ -1289,7 +1291,7 @@ class Validator implements Validatable
      *
      * @param string $before
      */
-    protected function checkDateTimeOrder(string $format, sgring $before, string $after): bool
+    protected function checkDateTimeOrder(string $format, string $before, string $after): bool
     {
         $before = $this->getDateTimeWithOptionalFormat($format, $before);
 
@@ -1773,7 +1775,7 @@ class Validator implements Validatable
      */
     protected function hasRule(string $attribute, $rules)
     {
-        return null !== $this->getRule($attribute, $rules);
+        return !is_null__($this->getRule($attribute, $rules));
     }
 
     /**
@@ -1822,7 +1824,7 @@ class Validator implements Validatable
      */
     protected function parseArrayRule($rules)
     {
-        return [studly_case(trim(return_array($rules, 0))), array_slice($rules, 1)];
+        return [studly_case(trim((string) return_array($rules, (string) 0))), array_slice($rules, 1)];
     }
 
     /**
@@ -1838,7 +1840,7 @@ class Validator implements Validatable
         // The format for specifying validation rules and parameters follows an
         // easy {rule}:{parameters} formatting convention. For instance the
         // rule "Max:3" states that the value may only be three letters.
-        if (strpos($rules, ':') !== false) {
+        if (!is_false__(strpos($rules, ':'))) {
             [$rules, $parameter] = explode(':', $rules, 2);
 
             $parameters = $this->parseParameters($rules, $parameter);
@@ -2309,6 +2311,6 @@ class Validator implements Validatable
             return $this->callExtension($rule, $parameters);
         }
 
-        throw new BadMethodCallException("Method [$method] does not exist.");
+        throw new BadMethodCallException(sprintf('Method [%s] does not exist.', $method));
     }
 }

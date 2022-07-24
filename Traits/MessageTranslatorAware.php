@@ -18,6 +18,7 @@ use function array_key_exists;
 use function array_merge;
 use function explode;
 use function is_array;
+use function Qubus\Support\Helpers\is_null__;
 use function Qubus\Support\Helpers\value;
 
 trait MessageTranslatorAware
@@ -50,7 +51,7 @@ trait MessageTranslatorAware
      */
     protected function arrayGet(array $array, ?string $key, $default = null)
     {
-        if (null === $key) {
+        if (is_null__($key)) {
             return $array;
         }
 
