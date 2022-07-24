@@ -21,6 +21,7 @@ use Qubus\Validation\Translators\StringTranslator;
 use Qubus\Validation\Validator;
 
 use function call_user_func;
+use function Qubus\Support\Helpers\is_null__;
 use function Qubus\Support\Helpers\snake_case;
 
 class Factory
@@ -94,7 +95,7 @@ class Factory
         // it may be written besides database. We'll inject it into the validator.
         $validator = $this->resolve($data, $rules, $messages, $customAttributes);
 
-        if (null !== $this->verifier) {
+        if (!is_null__($this->verifier)) {
             $validator->setPresenceVerifier($this->verifier);
         }
 
@@ -133,7 +134,7 @@ class Factory
      */
     protected function resolve(array $data, array $rules, array $messages, array $customAttributes)
     {
-        if (null === $this->resolver) {
+        if (is_null__($this->resolver)) {
             return new Validator($this->translator, $data, $rules, $messages, $customAttributes);
         } else {
             return call_user_func($this->resolver, $this->translator, $data, $rules, $messages, $customAttributes);
