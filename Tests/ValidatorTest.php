@@ -23,7 +23,7 @@ class ValidatorTest extends TestCase
     /** @var Factory $validator */
     protected $validator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->validator = new Factory();
     }

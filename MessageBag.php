@@ -23,6 +23,7 @@ use function array_merge_recursive;
 use function count;
 use function in_array;
 use function json_encode;
+use function Qubus\Support\Helpers\array_key_exists__;
 use function str_replace;
 
 use const COUNT_RECURSIVE;
@@ -121,7 +122,7 @@ class MessageBag implements Countable, JsonSerializable
         // If the message exists in the container, we will transform it and return
         // the message. Otherwise, we'll return an empty array since the entire
         // methods is to return back an array of messages in the first place.
-        if (array_key_exists($key, $this->messages)) {
+        if (array_key_exists__($key, $this->messages)) {
             return $this->transform($this->messages[$key], $format, $key);
         }
 
