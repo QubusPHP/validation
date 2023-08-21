@@ -17,7 +17,6 @@ namespace Qubus\Validation;
 use Countable;
 use JsonSerializable;
 
-use function array_key_exists;
 use function array_merge;
 use function array_merge_recursive;
 use function count;
@@ -31,7 +30,7 @@ use const COUNT_RECURSIVE;
 class MessageBag implements Countable, JsonSerializable
 {
     /**
-     * All of the registered messages.
+     * All the registered messages.
      *
      * @var array $messages
      */
@@ -46,7 +45,7 @@ class MessageBag implements Countable, JsonSerializable
      * Create a new message bag instance.
      *
      * @param array $messages
-     * @return MessageBag
+     * @return void
      */
     public function __construct(array $messages = [])
     {
@@ -58,6 +57,8 @@ class MessageBag implements Countable, JsonSerializable
     /**
      * Add a message to the bag.
      *
+     * @param string $key
+     * @param string $message
      * @return self
      */
     public function add(string $key, string $message): self
@@ -111,8 +112,10 @@ class MessageBag implements Countable, JsonSerializable
     }
 
     /**
-     * Get all of the messages from the bag for a given key.
+     * Get all the messages from the bag for a given key.
      *
+     * @param string|null $key
+     * @param string|null $format
      * @return array
      */
     public function get(?string $key = null, ?string $format = null): array
@@ -130,8 +133,9 @@ class MessageBag implements Countable, JsonSerializable
     }
 
     /**
-     * Get all of the messages for every key in the bag.
+     * Get all the messages for every key in the bag.
      *
+     * @param string|null $format
      * @return array
      */
     public function all(?string $format = null): array
@@ -150,7 +154,9 @@ class MessageBag implements Countable, JsonSerializable
     /**
      * Format an array of messages.
      *
-     * @param array  $messages
+     * @param array $messages
+     * @param string $format
+     * @param string $messageKey
      * @return array
      */
     protected function transform(array $messages, string $format, string $messageKey): array
