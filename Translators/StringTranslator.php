@@ -20,7 +20,7 @@ interface StringTranslator
      * Translator.
      *
      * @param string $key message key.
-     * @return string
+     * @return mixed
      */
-    public function trans(string $key);
+    public function trans(string $key): mixed;
 }

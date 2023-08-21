@@ -19,7 +19,13 @@ interface PresenceVerifier
     /**
      * Count the number of objects in a collection having the given value.
      *
-     * @param array  $extra
+     * @param string $collection
+     * @param string $column
+     * @param string $value
+     * @param int|null $excludeId
+     * @param string|null $idColumn
+     * @param array $extra
+     * @return int
      */
     public function getCount(
         string $collection,
@@ -33,8 +39,11 @@ interface PresenceVerifier
     /**
      * Count the number of objects in a collection with the given values.
      *
-     * @param array  $values
-     * @param array  $extra
+     * @param string $collection
+     * @param string $column
+     * @param array $values
+     * @param array $extra
+     * @return int
      */
     public function getMultiCount(
         string $collection,

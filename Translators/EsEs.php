@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Qubus\Validation\Translators;
 
 use Qubus\Validation\Traits\MessageTranslatorAware;
-use Qubus\Validation\Translators\StringTranslator;
 
 class EsEs implements StringTranslator
 {

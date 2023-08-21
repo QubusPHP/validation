@@ -35,9 +35,9 @@ trait MessageTranslatorAware
      * Translate a string.
      *
      * @param string $key Key to be spliced.
-     * @return string
+     * @return mixed
      */
-    public function trans(string $key)
+    public function trans(string $key): mixed
     {
         return $this->arrayGet($this->messages, $key, $key);
     }
@@ -45,11 +45,12 @@ trait MessageTranslatorAware
     /**
      * Use dot(.) string.
      *
-     * @param array  $array
-     * @param mixed  $default
+     * @param array $array
+     * @param string|null $key
+     * @param mixed|null $default
      * @return mixed
      */
-    protected function arrayGet(array $array, ?string $key, $default = null)
+    protected function arrayGet(array $array, ?string $key, mixed $default = null): mixed
     {
         if (is_null__($key)) {
             return $array;

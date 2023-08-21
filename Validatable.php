@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace Qubus\Validation;
 
-use Qubus\Validation\MessageBag;
-
 interface Validatable
 {
     /**
