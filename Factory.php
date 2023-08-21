@@ -18,7 +18,6 @@ use Closure;
 use Qubus\Validation\Interfaces\PresenceVerifier;
 use Qubus\Validation\Translators\DefaultTranslator;
 use Qubus\Validation\Translators\StringTranslator;
-use Qubus\Validation\Validator;
 
 use function call_user_func;
 use function Qubus\Support\Helpers\is_null__;
@@ -37,28 +36,28 @@ class Factory
     protected ?PresenceVerifier $verifier = null;
 
     /**
-     * All of the custom validator extensions.
+     * All the custom validator extensions.
      *
      * @var array $extensions
      */
     protected array $extensions = [];
 
     /**
-     * All of the custom implicit validator extensions.
+     * All the custom implicit validator extensions.
      *
      * @var array $implicitExtensions
      */
     protected array $implicitExtensions = [];
 
     /**
-     * All of the custom validator message replacers.
+     * All the custom validator message replacers.
      *
      * @var array $replacers
      */
     protected array $replacers = [];
 
     /**
-     * All of the fallback messages for custom rules.
+     * All the fallback messages for custom rules.
      *
      * @var array $fallbackMessages
      */
@@ -72,7 +71,7 @@ class Factory
     /**
      * Create a new Validator factory instance.
      *
-     * @return Factory
+     * @return void
      */
     public function __construct(?StringTranslator $translator = null)
     {
@@ -88,7 +87,7 @@ class Factory
      * @param array $customAttributes
      * @return Validator
      */
-    public function make(array $data, array $rules, array $messages = [], array $customAttributes = [])
+    public function make(array $data, array $rules, array $messages = [], array $customAttributes = []): Validator
     {
         // The presence verifier is responsible for checking the unique and exists data
         // for the validator. It is behind an interface so that multiple versions of
@@ -107,7 +106,7 @@ class Factory
     /**
      * Add the extensions to a validator instance.
      */
-    protected function addExtensions(Validator $validator)
+    protected function addExtensions(Validator $validator): void
     {
         $validator->addExtensions($this->extensions);
 
@@ -132,7 +131,7 @@ class Factory
      * @param array $customAttributes
      * @return Validator
      */
-    protected function resolve(array $data, array $rules, array $messages, array $customAttributes)
+    protected function resolve(array $data, array $rules, array $messages, array $customAttributes): Validator
     {
         if (is_null__($this->resolver)) {
             return new Validator($this->translator, $data, $rules, $messages, $customAttributes);
@@ -144,11 +143,11 @@ class Factory
     /**
      * Register a custom validator extension.
      *
-     * @param string          $rule
-     * @param Closure|string $extension
-     * @param string          $message
+     * @param string $rule
+     * @param string|Closure $extension
+     * @param string|null $message
      */
-    public function extend($rule, $extension, $message = null): void
+    public function extend(string $rule, string|Closure $extension, string $message = null): void
     {
         $this->extensions[$rule] = $extension;
 
@@ -160,9 +159,11 @@ class Factory
     /**
      * Register a custom implicit validator extension.
      *
-     * @param Closure|string $extension
+     * @param string $rule
+     * @param string|Closure $extension
+     * @param string|null $message
      */
-    public function extendImplicit(string $rule, $extension, ?string $message = null): void
+    public function extendImplicit(string $rule, string|Closure $extension, ?string $message = null): void
     {
         $this->implicitExtensions[$rule] = $extension;
 
@@ -174,9 +175,10 @@ class Factory
     /**
      * Register a custom implicit validator message replacer.
      *
-     * @param Closure|string $replacer
+     * @param string $rule
+     * @param string|Closure $replacer
      */
-    public function replacer(string $rule, $replacer): void
+    public function replacer(string $rule, string|Closure $replacer): void
     {
         $this->replacers[$rule] = $replacer;
     }

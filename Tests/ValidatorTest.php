@@ -21,7 +21,7 @@ use Qubus\Validation\Translators\EsEs;
 class ValidatorTest extends TestCase
 {
     /** @var Factory $validator */
-    protected $validator;
+    protected Factory $validator;
 
     public function setUp(): void
     {
@@ -47,7 +47,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function parseRuleProvider()
+    public function parseRuleProvider(): array
     {
         return [
             // sometimes
@@ -714,7 +714,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function parseSpanishRuleProvider()
+    public function parseSpanishRuleProvider(): array
     {
         return [
             // active_url
