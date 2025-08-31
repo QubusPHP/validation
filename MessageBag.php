@@ -33,7 +33,9 @@ class MessageBag implements Countable, JsonSerializable
      *
      * @var array $messages
      */
-    protected array $messages = [];
+    public array $messages = [] {
+        &get => $this->messages;
+    }
 
     /**
      * Default format for message output.
@@ -163,7 +165,7 @@ class MessageBag implements Countable, JsonSerializable
         $messages = (array) $messages;
 
         // We will simply spin through the given messages and transform each one
-        // replacing the :message place holder with the real message allowing
+        // replacing the :message placeholder with the real message allowing
         // the messages to be easily formatted to each developer's desires.
         foreach ($messages as $key => &$message) {
             $replace = [':message', ':key'];
@@ -180,16 +182,6 @@ class MessageBag implements Countable, JsonSerializable
     protected function checkFormat(?string $format): ?string
     {
         return $format ?? $this->format;
-    }
-
-    /**
-     * Get the raw messages in the container.
-     *
-     * @return array
-     */
-    public function getMessages(): array
-    {
-        return $this->messages;
     }
 
     /**
@@ -252,7 +244,7 @@ class MessageBag implements Countable, JsonSerializable
      */
     public function toArray(): array
     {
-        return $this->getMessages();
+        return $this->messages;
     }
 
     /**

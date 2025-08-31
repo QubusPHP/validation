@@ -81,12 +81,15 @@ class Validator implements Validatable
     /**
      * The StringTranslator implementation.
      */
-    protected StringTranslator $translator;
+    public protected(set) StringTranslator $translator {
+        get => $this->translator;
+        set(StringTranslator $value) => $this->translator = $value;
+    }
 
     /**
      * The Presence Verifier implementation.
      */
-    protected ?PresenceVerifier $presenceVerifier;
+    protected ?PresenceVerifier $presenceVerifier = null;
 
     /**
      * The failed validation rules.
@@ -105,7 +108,10 @@ class Validator implements Validatable
      *
      * @var array $data
      */
-    protected array $data;
+    public protected(set) array $data {
+        get => $this->data;
+        set(array $value) => $this->data = $this->parseData($value);
+    }
 
     /**
      * The files under validation.
@@ -119,7 +125,7 @@ class Validator implements Validatable
      *
      * @var array $rules
      */
-    protected array $rules;
+    protected array $rules = [];
 
     /**
      * All the registered "after" callbacks.
@@ -133,42 +139,56 @@ class Validator implements Validatable
      *
      * @var array $customMessages
      */
-    protected array $customMessages = [];
+    public protected(set) array $customMessages = [] {
+        get => $this->customMessages;
+        set(array $value) => $this->customMessages = array_merge($this->customMessages, $value);
+    }
 
     /**
      * The array of fallback error messages.
      *
      * @var array $fallbackMessages
      */
-    protected array $fallbackMessages = [];
+    public array $fallbackMessages = [] {
+        get => $this->fallbackMessages;
+        set(array $value) => $this->fallbackMessages = $value;
+    }
 
     /**
      * The array of custom attribute names.
      *
      * @var array $customAttributes
      */
-    protected array $customAttributes = [];
+    protected array $customAttributes = [] {
+        get => $this->customAttributes;
+    }
 
     /**
      * The array of custom displayable values.
      *
      * @var array $customValues
      */
-    protected array $customValues = [];
+    public array $customValues = [] {
+        get => $this->customValues;
+    }
 
     /**
      * All the custom validator extensions.
      *
      * @var array $extensions
      */
-    protected array $extensions = [];
+    protected array $extensions = [] {
+        &get => $this->extensions;
+    }
 
     /**
      * All the custom replacer extensions.
      *
      * @var array $replacers
      */
-    protected array $replacers = [];
+    public array $replacers = [] {
+        &get => $this->replacers;
+    }
 
     /**
      * The size related validation rules.
@@ -218,7 +238,7 @@ class Validator implements Validatable
     ) {
         $this->translator = $translator;
         $this->customMessages = $messages;
-        $this->data = $this->parseData($data);
+        $this->data = $data;
         $this->rules = $this->explodeRules($rules);
         $this->customAttributes = $customAttributes;
     }
@@ -397,9 +417,9 @@ class Validator implements Validatable
      * Get the value of a given attribute.
      *
      * @param string $attribute
-     * @return array|null
+     * @return mixed
      */
-    protected function getValue(string $attribute): ?array
+    protected function getValue(string $attribute): mixed
     {
         if (null !== ($value = return_array($this->data, $attribute))) {
             return $value;
@@ -544,13 +564,7 @@ class Validator implements Validatable
      */
     protected function anyFailingRequired(array $attributes): bool
     {
-        foreach ($attributes as $key) {
-            if (! $this->validateRequired($key, $this->getValue($key))) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($attributes, fn($key) => !$this->validateRequired($key, $this->getValue($key)));
     }
 
     /**
@@ -561,13 +575,7 @@ class Validator implements Validatable
      */
     protected function allFailingRequired(array $attributes): bool
     {
-        foreach ($attributes as $key) {
-            if ($this->validateRequired($key, $this->getValue($key))) {
-                return false;
-            }
-        }
-
-        return true;
+        return array_all($attributes, fn($key) => !$this->validateRequired($key, $this->getValue($key)));
     }
 
     /**
@@ -2077,16 +2085,6 @@ class Validator implements Validatable
     }
 
     /**
-     * Get the array of custom validator extensions.
-     *
-     * @return array
-     */
-    public function getExtensions(): array
-    {
-        return $this->extensions;
-    }
-
-    /**
      * Register an array of custom validator extensions.
      *
      * @param array $extensions
@@ -2141,16 +2139,6 @@ class Validator implements Validatable
     }
 
     /**
-     * Get the array of custom validator message replacers.
-     *
-     * @return array
-     */
-    public function getReplacers(): array
-    {
-        return $this->replacers;
-    }
-
-    /**
      * Register an array of custom validator message replacers.
      *
      * @param array $replacers
@@ -2175,26 +2163,6 @@ class Validator implements Validatable
     public function addReplacer(string $rule, string|Closure $replacer): void
     {
         $this->replacers[snake_case($rule)] = $replacer;
-    }
-
-    /**
-     * Get the data under validation.
-     *
-     * @return array
-     */
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    /**
-     * Set the data under validation.
-     *
-     * @param array $data
-     */
-    public function setData(array $data): void
-    {
-        $this->data = $this->parseData($data);
     }
 
     /**
@@ -2292,54 +2260,6 @@ class Validator implements Validatable
     }
 
     /**
-     * Get the StringTranslator implementation.
-     *
-     * @return StringTranslator
-     */
-    public function getTranslator(): StringTranslator
-    {
-        return $this->translator;
-    }
-
-    /**
-     * Set the StringTranslator implementation.
-     */
-    public function setTranslator(StringTranslator $translator): void
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * Get the custom messages for the validator.
-     *
-     * @return array
-     */
-    public function getCustomMessages(): array
-    {
-        return $this->customMessages;
-    }
-
-    /**
-     * Set the custom messages for the validator.
-     *
-     * @param array $messages
-     */
-    public function setCustomMessages(array $messages): void
-    {
-        $this->customMessages = array_merge($this->customMessages, $messages);
-    }
-
-    /**
-     * Get the custom attributes used by the validator.
-     *
-     * @return array
-     */
-    public function getCustomAttributes(): array
-    {
-        return $this->customAttributes;
-    }
-
-    /**
      * Add custom attributes to the validator.
      *
      * @param array $customAttributes
@@ -2353,16 +2273,6 @@ class Validator implements Validatable
     }
 
     /**
-     * Get the custom values for the validator.
-     *
-     * @return array
-     */
-    public function getCustomValues(): array
-    {
-        return $this->customValues;
-    }
-
-    /**
      * Add the custom values for the validator.
      *
      * @param array $customValues
@@ -2373,26 +2283,6 @@ class Validator implements Validatable
         $this->customValues = array_merge($this->customValues, $customValues);
 
         return $this;
-    }
-
-    /**
-     * Get the fallback messages for the validator.
-     *
-     * @return array
-     */
-    public function getFallbackMessages(): array
-    {
-        return $this->fallbackMessages;
-    }
-
-    /**
-     * Set the fallback messages for the validator.
-     *
-     * @param array $messages
-     */
-    public function setFallbackMessages(array $messages): void
-    {
-        $this->fallbackMessages = $messages;
     }
 
     /**
@@ -2481,6 +2371,8 @@ class Validator implements Validatable
         } elseif (is_string($callback)) {
             return $this->callClassBasedReplacer($callback, $message, $attribute, $rule, $parameters);
         }
+
+        return '';
     }
 
     /**

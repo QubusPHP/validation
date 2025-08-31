@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Qubus\Tests\Validation;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Qubus\Validation\Factory;
 use Qubus\Validation\Translators\EsEs;
@@ -23,9 +24,8 @@ class ValidatorTest extends TestCase
      * @param array $rule
      * @param bool $status
      * @param string|null $message
-     *
-     * @dataProvider parseRuleProvider
      */
+    #[DataProvider('parseRuleProvider')]
     public function testDefaultCases($input, $rule, $status, $message = null)
     {
         $validator = $this->validator->make($input, $rule);
@@ -37,7 +37,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function parseRuleProvider(): array
+    public static function parseRuleProvider(): array
     {
         return [
             // sometimes
@@ -681,9 +681,8 @@ class ValidatorTest extends TestCase
      * @param array $rule
      * @param bool $status
      * @param string|null $message
-     *
-     * @dataProvider parseSpanishRuleProvider
      */
+    #[DataProvider('parseSpanishRuleProvider')]
     public function testSpanishTranslationCases($input, $rule, $status, $message = null)
     {
         $messages = [
@@ -704,7 +703,7 @@ class ValidatorTest extends TestCase
         }
     }
 
-    public function parseSpanishRuleProvider(): array
+    public static function parseSpanishRuleProvider(): array
     {
         return [
             // active_url

@@ -118,7 +118,7 @@ class Factory
 
         $validator->addReplacers($this->replacers);
 
-        $validator->setFallbackMessages($this->fallbackMessages);
+        $validator->fallbackMessages = $this->fallbackMessages;
     }
 
     /**
