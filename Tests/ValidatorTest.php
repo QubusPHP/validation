@@ -26,7 +26,7 @@ class ValidatorTest extends TestCase
      * @param string|null $message
      */
     #[DataProvider('parseRuleProvider')]
-    public function testDefaultCases($input, $rule, $status, $message = null)
+    public function testDefaultCases(array $input, array $rule, bool $status, ?string $message = null)
     {
         $validator = $this->validator->make($input, $rule);
 
@@ -683,7 +683,7 @@ class ValidatorTest extends TestCase
      * @param string|null $message
      */
     #[DataProvider('parseSpanishRuleProvider')]
-    public function testSpanishTranslationCases($input, $rule, $status, $message = null)
+    public function testSpanishTranslationCases(array $input, array $rule, bool $status, ?string $message = null)
     {
         $messages = [
             'active_url'           => 'El :attribute no es una URL válida.',
