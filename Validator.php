@@ -1628,16 +1628,12 @@ class Validator implements Validatable
      */
     protected function getAttributeList(array $values): array
     {
-        $attributes = [];
-
         // For each attribute in the list we will simply get its displayable form as
         // this is convenient when replacing lists of parameters like some of the
         // replacement functions do when formatting out the validation message.
-        foreach ($values as $key => $value) {
-            $attributes[$key] = $this->getAttribute($value);
-        }
-
-        return $attributes;
+        return array_map(function ($value) {
+            return $this->getAttribute($value);
+        }, $values);
     }
 
     /**
