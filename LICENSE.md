@@ -1,10 +1,8 @@
 The MIT License (MIT)
 
-Modified work Copyright (c) 2020 [Joshua Parker](mailto:josh@joshuaparker.blog)
+Modified work Copyright (c) 2025 [Joshua Parker](mailto:joshua@joshuaparker.dev)
 
-Original work Copyright (c) 2016 [Taylor Otwell](mailto:taylor@laravel.com)
-
-Modified work Copyright (c) 2016 [overtrue](mailto:i@overtrue.me)
+Original work Copyright (c) 2016-2019 [Muhammad Syifa](mailto:emsifa@gmail.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
