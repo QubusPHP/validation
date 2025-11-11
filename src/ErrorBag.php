@@ -54,7 +54,7 @@ class ErrorBag
      */
     public function has(string $key): bool
     {
-        list($key, $ruleName) = $this->parsekey($key);
+        [$key, $ruleName] = $this->parsekey($key);
         if ($this->isWildcardKey($key)) {
             $messages = $this->filterMessagesForWildcardKey($key, $ruleName);
             return count(Helper::arrayDot($messages)) > 0;
@@ -77,7 +77,7 @@ class ErrorBag
      */
     public function first(string $key): mixed
     {
-        list($key, $ruleName) = $this->parsekey($key);
+        [$key, $ruleName] = $this->parsekey($key);
         if ($this->isWildcardKey($key)) {
             $messages = $this->filterMessagesForWildcardKey($key, $ruleName);
             $flattenMessages = Helper::arrayDot($messages);
@@ -106,7 +106,7 @@ class ErrorBag
      */
     public function get(string $key, string $format = ':message'): array
     {
-        list($key, $ruleName) = $this->parsekey($key);
+        [$key, $ruleName] = $this->parsekey($key);
         $results = [];
         if ($this->isWildcardKey($key)) {
             $messages = $this->filterMessagesForWildcardKey($key, $ruleName);
