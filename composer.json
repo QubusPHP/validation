@@ -11,7 +11,7 @@
     "require": {
         "php": ">=8.4",
         "qubus/support": "^4",
-        "qubus/valueobjects": "^3.0"
+        "qubus/valueobjects": "^4"
     },
     "require-dev": {
         "qubus/qubus-coding-standard": "^2"
