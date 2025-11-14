@@ -16,10 +16,9 @@ class ValidationException extends HttpException
     public function __construct(
         protected UriInterface|string|null $uri = null,
         string $message = '',
+        protected $code = 400,
         ?Throwable $previous = null,
-        protected array $headers = [],
-        protected $code = 0,
     ) {
-        parent::__construct($uri, $message, $previous, $headers, $code);
+        parent::__construct($uri, $message, $code, $previous);
     }
 }
