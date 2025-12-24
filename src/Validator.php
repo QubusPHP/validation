@@ -146,6 +146,8 @@ class Validator
             'min'                       => new Rules\Min(),
             'max'                       => new Rules\Max(),
             'between'                   => new Rules\Between(),
+            'ulid'                      => new Rules\Ulid(),
+            'uuid'                      => new Rules\Uuid(),
             'url'                       => new Rules\Url(),
             'int'                       => new Rules\Integer(),
             'integer'                   => new Rules\Integer(), // alias of integer
