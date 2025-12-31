@@ -178,6 +178,7 @@ class Validator
             'default'                   => new Rules\Defaults(), // alias of defaults
             'nullable'                  => new Rules\Nullable(),
             'string'                    => new Rules\TypeString(),
+            'enum'                      => new Rules\Enum(),
         ];
 
         foreach ($baseValidator as $key => $validator) {
