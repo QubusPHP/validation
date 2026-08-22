@@ -39,14 +39,18 @@ class Extension extends Rule
         $this->requireParameters(['allowed_extensions']);
         $allowedExtensions = $this->parameter('allowed_extensions');
         foreach ($allowedExtensions as $key => $ext) {
-            $allowedExtensions[$key] = ltrim($ext, '.');
+            $allowedExtensions[$key] = strtolower(ltrim((string) $ext, '.'));
         }
 
         $or = $this->validation ? $this->validation->getTranslation('or') : 'or';
         $allowedExtensionsText = Helper::join(Helper::wraps($allowedExtensions, ".", ""), ', ', ", {$or} ");
         $this->setParameterText('allowed_extensions', $allowedExtensionsText);
 
+        if (!is_string($value)) {
+            return false;
+        }
+
         $ext = strtolower(pathinfo($value, PATHINFO_EXTENSION));
-        return $ext && in_array($ext, $allowedExtensions);
+        return $ext !== '' && in_array($ext, $allowedExtensions, true);
     }
 }

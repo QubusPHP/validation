@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Qubus\Validation\Rules;
 
+use DateTimeImmutable;
 use Qubus\Validation\MissingRequiredParameterException;
 use Qubus\Validation\Rule;
 
@@ -29,6 +30,14 @@ class Date extends Rule
         $this->requireParameters($this->fillableParams);
 
         $format = $this->parameter('format');
-        return date_create_from_format($format, $value ?? '') !== false;
+        if (!is_string($format) || (!is_scalar($value) && !$value instanceof \Stringable)) {
+            return false;
+        }
+
+        $date = DateTimeImmutable::createFromFormat($format, (string) $value);
+        $errors = DateTimeImmutable::getLastErrors();
+
+        return $date !== false
+        && ($errors === false || ($errors['warning_count'] === 0 && $errors['error_count'] === 0));
     }
 }

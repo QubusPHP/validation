@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Qubus\Validation\Rules\Traits;
 
-use InvalidArgumentException;
 use Qubus\Validation\Helper;
 
 trait FileAware
@@ -31,7 +32,9 @@ trait FileAware
      */
     public function isUploadedFile(mixed $value): bool
     {
-        return $this->isValueFromUploadedFiles($value) && is_uploaded_file($value['tmp_name']);
+        return $this->isValueFromUploadedFiles($value)
+        && is_string($value['tmp_name'])
+        && is_uploaded_file($value['tmp_name']);
     }
 
     /**

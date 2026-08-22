@@ -27,7 +27,7 @@ class Different extends Rule
         $this->requireParameters($this->fillableParams);
 
         $field = $this->parameter('field');
-        $anotherValue = $this->validation->getValue($field);
+        $anotherValue = $this->getAttribute()->getValue($field);
 
         return $value !== $anotherValue;
     }

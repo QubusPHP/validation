@@ -1,7 +1,7 @@
-Validation
-==========
+# Qubus Validation
 
-This framework-agnostic validation library is designed to make it more convenient for you to complete data validation in any project or framework.
+Qubus Validation is a framework-agnostic PHP library for validating arrays. It supports pipe-style rules,
+programmatic rule objects, nested data, wildcards, custom messages, file uploads, callbacks, and user-defined rules.
 
 ## Requirements
 
@@ -19,4 +19,5 @@ $ composer require qubus/validation
 - [Documentation](https://codefyphp.com/docs/digging-deeper/validation/)
 
 ## License
-Released under the MIT [License](https://opensource.org/licenses/MIT).
+
+Released under the [MIT License](https://opensource.org/licenses/MIT).

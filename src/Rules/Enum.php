@@ -7,8 +7,6 @@ namespace Qubus\Validation\Rules;
 use Qubus\Validation\Rule;
 use UnitEnum;
 
-use function Qubus\Support\Helpers\is_null__;
-
 class Enum extends Rule
 {
     protected string $message = "The :attribute is not valid Enum.";
@@ -16,15 +14,12 @@ class Enum extends Rule
     /**
      * Check $value is valid
      *
-     * @param string|UnitEnum $value
+     * @param mixed $value
      * @return bool
      */
     public function check(mixed $value): bool
     {
-        if ((is_string($value) && ! enum_exists($value)) || ! method_exists($value, 'tryFrom')) {
-            return false;
-        }
-
-        return true;
+        return $value instanceof UnitEnum
+        || (is_string($value) && enum_exists($value));
     }
 }

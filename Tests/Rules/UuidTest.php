@@ -26,5 +26,6 @@ class UuidTest extends TestCase
         Assert::assertFalse($this->rule->check('uuid'));
         Assert::assertFalse($this->rule->check('null'));
         Assert::assertFalse($this->rule->check('ebc87949-192c-48ca-d7a173193eaf'));
+        Assert::assertFalse($this->rule->check([]));
     }
 }

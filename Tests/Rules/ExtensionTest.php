@@ -23,6 +23,7 @@ class ExtensionTest extends TestCase
         Assert::assertTrue($this->rule->fillParameters(['pdf','png','txt'])->check('path/to/somefile.txt'));
         Assert::assertTrue($this->rule->fillParameters(['pdf','png','txt'])->check('./absolute/path/to/somefile.txt'));
         Assert::assertTrue($this->rule->fillParameters(['pdf','png','txt'])->check('https://site.test/somefile.txt'));
+        Assert::assertTrue($this->rule->fillParameters(['PDF','PNG','TXT'])->check('somefile.txt'));
     }
 
     public function testInvalids()
@@ -32,5 +33,6 @@ class ExtensionTest extends TestCase
         Assert::assertFalse($this->rule->fillParameters(['pdf','png','txt'])->check('notafile'));
         Assert::assertFalse($this->rule->fillParameters(['pdf','png','txt'])->check('somefile.php'));
         Assert::assertFalse($this->rule->fillParameters(['.pdf','.png','.txt'])->check('somefile.php'));
+        Assert::assertFalse($this->rule->fillParameters(['pdf','png','txt'])->check([]));
     }
 }

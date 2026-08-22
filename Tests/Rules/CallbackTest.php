@@ -32,4 +32,13 @@ class CallbackTest extends TestCase
         Assert::assertFalse($this->rule->check('abc12'));
         Assert::assertFalse($this->rule->check("12abc"));
     }
+
+    public function testStaticCallbackCanBeUsed(): void
+    {
+        $rule = new Callback();
+        $rule->setCallback(static fn(mixed $value): bool => $value === 'valid');
+
+        Assert::assertTrue($rule->check('valid'));
+        Assert::assertFalse($rule->check('invalid'));
+    }
 }

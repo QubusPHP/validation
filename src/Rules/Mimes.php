@@ -29,6 +29,10 @@ class Mimes extends Rule
      */
     public function fillParameters(array $params): Rule
     {
+        if (count($params) === 1 && is_array($params[0])) {
+            $params = $params[0];
+        }
+
         $this->allowTypes($params);
         return $this;
     }
@@ -45,7 +49,10 @@ class Mimes extends Rule
             $types = explode('|', $types);
         }
 
-        $this->params['allowed_types'] = $types;
+        $this->params['allowed_types'] = array_map(
+            static fn(mixed $type): string => strtolower((string) $type),
+            (array) $types
+        );
 
         return $this;
     }
@@ -80,6 +87,10 @@ class Mimes extends Rule
         }
 
         if (!empty($allowedTypes)) {
+            if (!is_string($value['type'])) {
+                return false;
+            }
+
             $guesser = new MimeTypeGuesser();
             $ext = $guesser->getExtension($value['type']);
             unset($guesser);

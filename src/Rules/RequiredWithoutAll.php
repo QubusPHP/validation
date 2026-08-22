@@ -42,12 +42,13 @@ class RequiredWithoutAll extends Required
         $requiredValidator = $validator('required');
 
         foreach ($fields as $field) {
+            $field = $this->getAttribute()->resolveSiblingKey($field);
             if ($this->validation->hasValue($field)) {
                 return true;
             }
         }
 
         $this->setAttributeAsRequired();
-        return $requiredValidator->check($value, []);
+        return $requiredValidator->check($value);
     }
 }

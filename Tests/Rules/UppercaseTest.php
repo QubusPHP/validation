@@ -27,5 +27,6 @@ class UppercaseTest extends TestCase
         Assert::assertFalse($this->rule->check('username'));
         Assert::assertFalse($this->rule->check('Username'));
         Assert::assertFalse($this->rule->check('userName'));
+        Assert::assertFalse($this->rule->check([]));
     }
 }

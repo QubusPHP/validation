@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Qubus\Validation;
 
-use Qubus\Exception\Data\TypeException;
-use Qubus\Support\DataType;
-
 use function implode;
 use function Qubus\Support\Helpers\is_null__;
 use function Qubus\Support\Helpers\snake_case;
@@ -67,11 +64,26 @@ class Helper
      * @param string|null $key
      * @param mixed|null $default
      * @return mixed
-     * @throws TypeException
      */
     public static function arrayGet(array $array, ?string $key = null, mixed $default = null): mixed
     {
-        return new DataType()->array->get($array, $key, $default);
+        if ($key === null) {
+            return $array;
+        }
+
+        if (array_key_exists($key, $array)) {
+            return $array[$key];
+        }
+
+        foreach (explode('.', $key) as $segment) {
+            if (!is_array($array) || !array_key_exists($segment, $array)) {
+                return $default;
+            }
+
+            $array = $array[$segment];
+        }
+
+        return $array;
     }
 
     /**
@@ -103,7 +115,7 @@ class Helper
      * @param array|string|null $key
      * @param mixed             $value
      * @param bool              $overwrite
-     * @return mixed
+     * @return array
      */
     public static function arraySet(mixed &$target, array|string|null $key, mixed $value, bool $overwrite = true): array
     {
@@ -170,7 +182,14 @@ class Helper
         $segment = array_shift($segments);
 
         if ($segment == '*') {
-            $target = [];
+            if ($segments) {
+                foreach ($target as &$inner) {
+                    static::arrayUnset($inner, $segments);
+                }
+                unset($inner);
+            } else {
+                $target = [];
+            }
         } elseif ($segments) {
             if (array_key_exists($segment, $target)) {
                 static::arrayUnset($target[$segment], $segments);
@@ -211,7 +230,7 @@ class Helper
         $last = array_pop($pieces);
 
         return match (count($pieces)) {
-            0 => $last ?: '',
+            0 => is_string($last) || is_int($last) ? $last : (string) $last,
             1 => $pieces[0] . $lastSeparator . $last,
             default => implode($separator, $pieces) . $lastSeparator . $last,
         };

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Qubus\Validation\Rules\Traits;
 
 use Exception;
@@ -16,7 +18,7 @@ trait DateUtilsAware
      */
     protected function isValidDate(mixed $date): bool
     {
-        return (strtotime($date) !== false);
+        return (is_string($date) || is_int($date)) && strtotime((string) $date) !== false;
     }
 
     /**
@@ -27,6 +29,10 @@ trait DateUtilsAware
      */
     protected function throwException(mixed $value): Exception
     {
+        $value = is_scalar($value) || $value === null
+        ? (string) $value
+        : get_debug_type($value);
+
         // phpcs:ignore
         return new Exception(
             sprintf("Expected a valid date, got '%s' instead. 
@@ -42,6 +48,11 @@ trait DateUtilsAware
      */
     protected function getTimeStamp(mixed $date): int
     {
-        return strtotime($date);
+        $timestamp = strtotime((string) $date);
+        if ($timestamp === false) {
+            throw $this->throwException($date);
+        }
+
+        return $timestamp;
     }
 }

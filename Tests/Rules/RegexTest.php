@@ -23,5 +23,7 @@ class RegexTest extends TestCase
     public function testInvalids()
     {
         Assert::assertFalse($this->rule->fillParameters(["/^F/i"])->check("bar"));
+        Assert::assertFalse($this->rule->fillParameters(["invalid"])->check("bar"));
+        Assert::assertFalse($this->rule->fillParameters(["/^F/i"])->check([]));
     }
 }

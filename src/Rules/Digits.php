@@ -24,6 +24,10 @@ class Digits extends Rule
     {
         $this->requireParameters($this->fillableParams);
 
+        if (!is_string($value) && !is_int($value)) {
+            return false;
+        }
+
         $length = (int) $this->parameter('length');
 
         return ! preg_match('/[^0-9]/', (string) $value)

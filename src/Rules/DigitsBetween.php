@@ -24,6 +24,10 @@ class DigitsBetween extends Rule
     {
         $this->requireParameters($this->fillableParams);
 
+        if (!is_string($value) && !is_int($value)) {
+            return false;
+        }
+
         $min = (int) $this->parameter('min');
         $max = (int) $this->parameter('max');
 

@@ -18,6 +18,10 @@ class Uuid extends Rule
      */
     public function check(mixed $value): bool
     {
+        if (!is_string($value)) {
+            return false;
+        }
+
         return \Ramsey\Uuid\Uuid::isValid($value) && $value !== \Ramsey\Uuid\Uuid::NIL;
     }
 }

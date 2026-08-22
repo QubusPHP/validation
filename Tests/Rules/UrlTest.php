@@ -51,5 +51,6 @@ class UrlTest extends TestCase
         Assert::assertFalse($this->rule->forScheme('ftp')->check('http://www.foobar.com'));
         Assert::assertFalse($this->rule->forScheme('jdbc')->check('http://www.foobar.com'));
         Assert::assertFalse($this->rule->forScheme(['http', 'https'])->check('any://www.foobar.com'));
+        Assert::assertFalse($this->rule->check([]));
     }
 }

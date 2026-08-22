@@ -6,6 +6,7 @@ namespace Qubus\Tests\Validation;
 
 use DateTime;
 use PHPUnit\Framework\Assert;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Qubus\Tests\Validation\Fixtures\Even;
@@ -17,6 +18,7 @@ use Qubus\Validation\Validator;
 
 use const UPLOAD_ERR_OK;
 
+#[AllowMockObjectsWithoutExpectations]
 class ValidatorTest extends TestCase
 {
     protected ?Validator $validator = null;

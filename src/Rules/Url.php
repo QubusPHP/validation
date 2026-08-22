@@ -51,7 +51,12 @@ class Url extends Rule
         if (!$schemes) {
             return $this->validateCommonScheme($value);
         } else {
-            foreach ($schemes as $scheme) {
+            foreach ((array) $schemes as $scheme) {
+                if (!is_string($scheme) && !is_numeric($scheme)) {
+                    continue;
+                }
+
+                $scheme = (string) $scheme;
                 $method = 'validate' . ucfirst($scheme) . 'Scheme';
                 if (method_exists($this, $method)) {
                     if ($this->{$method}($value)) {
@@ -74,7 +79,7 @@ class Url extends Rule
      */
     public function validateBasic(mixed $value): bool
     {
-        return filter_var($value, FILTER_VALIDATE_URL) !== false;
+        return is_string($value) && filter_var($value, FILTER_VALIDATE_URL) !== false;
     }
 
     /**
@@ -89,7 +94,8 @@ class Url extends Rule
         if (is_null__($scheme)) {
             return $this->validateBasic($value) && (bool) preg_match("/^\w+:\/\//i", $value);
         } else {
-            return $this->validateBasic($value) && (bool) preg_match("/^{$scheme}:\/\//", $value);
+            $scheme = preg_quote((string) $scheme, '/');
+            return $this->validateBasic($value) && (bool) preg_match("/^{$scheme}:\/\//i", $value);
         }
     }
 
@@ -112,6 +118,6 @@ class Url extends Rule
      */
     public function validateJdbcScheme(mixed $value): bool
     {
-        return (bool) preg_match("/^jdbc:\w+:\/\//", $value);
+        return is_string($value) && (bool) preg_match("/^jdbc:\w+:\/\//i", $value);
     }
 }

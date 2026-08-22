@@ -18,7 +18,11 @@ trait SizeAware
     {
         if (
             $this->getAttribute()
-            && ($this->getAttribute()->hasRule('numeric') || $this->getAttribute()->hasRule('integer'))
+            && (
+                $this->getAttribute()->hasRule('numeric')
+                || $this->getAttribute()->hasRule('integer')
+                || $this->getAttribute()->hasRule('int')
+            )
             && is_numeric($value)
         ) {
             $value = (float) $value;

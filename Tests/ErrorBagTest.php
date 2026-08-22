@@ -79,6 +79,19 @@ class ErrorBagTest extends TestCase
         Assert::assertFalse($errors->has('items.0.*:unregistered_rule'));
     }
 
+    public function testWildcardMatchesOnePathSegment(): void
+    {
+        $errors = new ErrorBag([
+            'items.0.name' => ['required' => 'Direct child'],
+            'items.0.profile.name' => ['required' => 'Nested child'],
+        ]);
+
+        Assert::assertSame(
+            ['items.0.name' => ['required' => 'Direct child']],
+            $errors->get('items.*.name')
+        );
+    }
+
     public function testFirst()
     {
         $errors = new ErrorBag([

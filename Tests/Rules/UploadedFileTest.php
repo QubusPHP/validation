@@ -133,6 +133,27 @@ class UploadedFileTest extends TestCase
         ]));
     }
 
+    public function testZeroMaximumSizeIsEnforced(): void
+    {
+        $rule = $this->getMockBuilder(UploadedFile::class)
+            ->onlyMethods(['isUploadedFile'])
+            ->getMock();
+
+        $rule->expects($this->once())
+            ->method('isUploadedFile')
+            ->willReturn(true);
+
+        $rule->maxSize(0);
+
+        Assert::assertFalse($rule->check([
+            'name' => 'file.txt',
+            'type' => 'text/plain',
+            'size' => 1,
+            'tmp_name' => __FILE__,
+            'error' => UPLOAD_ERR_OK,
+        ]));
+    }
+
     public function testFileTypes()
     {
         $rule = $this->getMockBuilder(UploadedFile::class)

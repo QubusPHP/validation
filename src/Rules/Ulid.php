@@ -24,6 +24,6 @@ class Ulid extends Rule
             return false;
         }
 
-        return (bool) preg_match('/^[0-9A-HJKMNP-TV-Z]{26}$/i', $value);
+        return (bool) preg_match('/^[0-7][0-9A-HJKMNP-TV-Z]{25}$/i', $value);
     }
 }

@@ -42,9 +42,10 @@ class RequiredWith extends Required
         $requiredValidator = $validator('required');
 
         foreach ($fields as $field) {
+            $field = $this->getAttribute()->resolveSiblingKey($field);
             if ($this->validation->hasValue($field)) {
                 $this->setAttributeAsRequired();
-                return $requiredValidator->check($value, []);
+                return $requiredValidator->check($value);
             }
         }
 

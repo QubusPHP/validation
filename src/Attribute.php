@@ -130,7 +130,7 @@ class Attribute
      * Get rule.
      *
      * @param string $ruleKey
-     * @return void
+     * @return Rule|null
      */
     public function getRule(string $ruleKey)
     {
@@ -172,7 +172,7 @@ class Attribute
     /**
      * Set rule is required.
      *
-     * @return boolean
+     * @return bool
      */
     public function isRequired(): bool
     {
@@ -222,7 +222,7 @@ class Attribute
     /**
      * Get that is array attribute.
      *
-     * @return boolean
+     * @return bool
      */
     public function isArrayAttribute(): bool
     {
@@ -232,7 +232,7 @@ class Attribute
     /**
      * Check this attribute is using dot notation.
      *
-     * @return boolean
+     * @return bool
      */
     public function isUsingDotNotation(): bool
     {
@@ -248,13 +248,13 @@ class Attribute
     public function resolveSiblingKey(string $key): string
     {
         $indexes = $this->getKeyIndexes();
-        $keys = explode("*", $key);
-        $countAsterisks = count($keys) - 1;
-        if (count($indexes) < $countAsterisks) {
-            $indexes = array_merge($indexes, array_fill(0, $countAsterisks - count($indexes), "*"));
-        }
-        $args = array_merge([str_replace("*", "%s", $key)], $indexes);
-        return call_user_func_array('sprintf', $args);
+        $index = 0;
+
+        $resolvedKey = preg_replace_callback('/\*/', function () use ($indexes, &$index): string {
+            return (string) ($indexes[$index++] ?? '*');
+        }, $key);
+
+        return $resolvedKey ?? $key;
     }
 
     /**

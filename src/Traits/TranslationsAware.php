@@ -11,8 +11,8 @@ trait TranslationsAware
     /**
      * Given $key and $translation to set translation
      *
-     * @param mixed $key
-     * @param mixed $translation
+     * @param string $key
+     * @param string $translation
      * @return void
      */
     public function setTranslation(string $key, string $translation): void

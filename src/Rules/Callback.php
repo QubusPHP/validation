@@ -8,6 +8,7 @@ use Exception;
 use Qubus\Exception\Data\TypeException;
 use Qubus\Validation\Rule;
 use Closure;
+use ReflectionFunction;
 
 use function sprintf;
 
@@ -21,7 +22,7 @@ class Callback extends Rule
      * Set the Callback closure
      *
      * @param Closure $callback
-     * @return self
+     * @return Rule
      */
     public function setCallback(Closure $callback): Rule
     {
@@ -41,11 +42,14 @@ class Callback extends Rule
 
         $callback = $this->parameter('callback');
         if (false === $callback instanceof Closure) {
-            $key = $this->attribute->getKey();
+            $key = $this->attribute?->getKey() ?? $this->getKey();
             throw new TypeException(sprintf("Callback rule for '%s' is not callable.", $key));
         }
 
-        $callback = $callback->bindTo($this);
+        if (!new ReflectionFunction($callback)->isStatic()) {
+            $callback = $callback->bindTo($this);
+        }
+
         $invalidMessage = $callback($value);
 
         if (is_string($invalidMessage)) {

@@ -26,5 +26,7 @@ class DateTest extends TestCase
     {
         Assert::assertFalse($this->rule->check("10-10-2010"));
         Assert::assertFalse($this->rule->fillParameters(['Y-m-d'])->check("2010-10-10 10:10"));
+        Assert::assertFalse($this->rule->check("2024-02-30"));
+        Assert::assertFalse($this->rule->check([]));
     }
 }

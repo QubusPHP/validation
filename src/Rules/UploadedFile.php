@@ -88,9 +88,14 @@ class UploadedFile extends Rule implements BeforeValidate
     {
         if (is_string($types)) {
             $types = explode('|', $types);
+        } elseif (is_array($types) && count($types) === 1 && is_array($types[0])) {
+            $types = $types[0];
         }
 
-        $this->params['allowed_types'] = $types;
+        $this->params['allowed_types'] = array_map(
+            static fn(mixed $type): string => strtolower((string) $type),
+            (array) $types
+        );
 
         return $this;
     }
@@ -153,7 +158,11 @@ class UploadedFile extends Rule implements BeforeValidate
             return false;
         }
 
-        if ($minSize) {
+        if ($minSize !== null) {
+            if (!is_numeric($value['size'])) {
+                return false;
+            }
+
             $bytesMinSize = $this->getBytesSize($minSize);
             if ($value['size'] < $bytesMinSize) {
                 $this->setMessage('The :attribute file is too small, minimum size is :min_size');
@@ -161,7 +170,11 @@ class UploadedFile extends Rule implements BeforeValidate
             }
         }
 
-        if ($maxSize) {
+        if ($maxSize !== null) {
+            if (!is_numeric($value['size'])) {
+                return false;
+            }
+
             $bytesMaxSize = $this->getBytesSize($maxSize);
             if ($value['size'] > $bytesMaxSize) {
                 $this->setMessage('The :attribute file is too large, maximum size is :max_size');
@@ -170,6 +183,10 @@ class UploadedFile extends Rule implements BeforeValidate
         }
 
         if (!empty($allowedTypes)) {
+            if (!is_string($value['type'])) {
+                return false;
+            }
+
             $guesser = new MimeTypeGuesser();
             $ext = $guesser->getExtension($value['type']);
             unset($guesser);

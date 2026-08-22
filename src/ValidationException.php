@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Qubus\Validation;
 
 use Psr\Http\Message\UriInterface;
-use Qubus\Exception\Exception;
 use Qubus\Exception\Http\HttpException;
 use Throwable;
-
-use function sprintf;
 
 class ValidationException extends HttpException
 {

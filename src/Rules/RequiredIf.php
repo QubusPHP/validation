@@ -50,7 +50,7 @@ class RequiredIf extends Required
 
         if (in_array($anotherValue, $definedValues)) {
             $this->setAttributeAsRequired();
-            return $requiredValidator->check($value, []);
+            return $requiredValidator->check($value);
         }
 
         return true;

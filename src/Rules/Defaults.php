@@ -38,14 +38,14 @@ class Defaults extends Rule implements ModifyValue
     }
 
     /**
-     * Check $value is empty value
+     * Check $value is an empty value
      *
      * @param mixed $value
-     * @return boolean
+     * @return bool
      */
     protected function isEmptyValue(mixed $value): bool
     {
         $requiredValidator = new Required();
-        return false === $requiredValidator->check($value, []);
+        return false === $requiredValidator->check($value);
     }
 }

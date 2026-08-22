@@ -50,6 +50,9 @@ class HelperTest extends TestCase
 
         Assert::assertNull(Helper::arrayGet($array, 'foo.bar.baz.qux'));
         Assert::assertNull(Helper::arrayGet($array, 'one.two'));
+
+        $default = new \stdClass();
+        Assert::assertSame($default, Helper::arrayGet($array, 'missing', $default));
     }
 
     public function testArrayDot()
@@ -132,6 +135,20 @@ class HelperTest extends TestCase
             'stuffs' => [],
             'message' => "lorem ipsum",
         ], $array);
+
+        $profiles = [
+            'users' => [
+                ['name' => 'Ada', 'email' => 'ada@example.com'],
+                ['name' => 'Grace', 'email' => 'grace@example.com'],
+            ],
+        ];
+        Helper::arrayUnset($profiles, 'users.*.name');
+        Assert::assertEquals([
+            'users' => [
+                ['email' => 'ada@example.com'],
+                ['email' => 'grace@example.com'],
+            ],
+        ], $profiles);
     }
 
     public function testJoin()
@@ -148,6 +165,7 @@ class HelperTest extends TestCase
         Assert::assertEquals('1', Helper::join($pieces1, $separator, $lastSeparator));
         Assert::assertEquals('1, and 2', Helper::join($pieces2, $separator, $lastSeparator));
         Assert::assertEquals('1, 2, and 3', Helper::join($pieces3, $separator, $lastSeparator));
+        Assert::assertSame(0, Helper::join([0], $separator, $lastSeparator));
     }
 
     public function testWraps()

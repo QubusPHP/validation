@@ -37,7 +37,7 @@ class Validator
     /**
      * Register or override existing validator.
      *
-     * @param mixed $key
+     * @param string $key
      * @param Rule $rule
      * @return void
      */
@@ -48,7 +48,7 @@ class Validator
     }
 
     /**
-     * Get validator object from given $key.
+     * Get a validator object from a given $ key.
      *
      * @param mixed $key
      * @return mixed

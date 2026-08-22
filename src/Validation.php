@@ -96,18 +96,25 @@ class Validation
     public function validate(array $inputs = []): void
     {
         $this->errors = new ErrorBag(); // reset error bag
-        $this->inputs = array_merge($this->inputs, $this->resolveInputAttributes($inputs));
+        $this->validData = [];
+        $this->invalidData = [];
+        $this->inputs = array_replace($this->inputs, $this->resolveInputAttributes($inputs));
+
+        foreach ($this->attributes as $attribute) {
+            $attribute->setRequired(false);
+        }
 
         // Before validation hooks
-        foreach ($this->attributes as $attributeKey => $attribute) {
+        foreach ($this->attributes as $attribute) {
             foreach ($attribute->getRules() as $rule) {
+                $rule->setAttribute($attribute);
                 if ($rule instanceof BeforeValidate) {
                     $rule->beforeValidate();
                 }
             }
         }
 
-        foreach ($this->attributes as $attributeKey => $attribute) {
+        foreach ($this->attributes as $attribute) {
             $this->validateAttribute($attribute);
         }
     }
@@ -198,7 +205,6 @@ class Validation
      *
      * @param Attribute $attribute
      * @return array
-     * @throws TypeException
      */
     protected function parseArrayAttribute(Attribute $attribute): array
     {
@@ -207,14 +213,14 @@ class Validation
 
         $pattern = str_replace('\*', '([^\.]+)', preg_quote($attributeKey));
 
-        $data = array_merge($data, $this->extractValuesForWildcards(
+        $data = array_replace($data, $this->extractValuesForWildcards(
             $data,
             $attributeKey
         ));
 
         $attributes = [];
-
         foreach ($data as $key => $value) {
+            $key = (string) $key;
             if ((bool) preg_match('/^' . $pattern . '\z/', $key, $match)) {
                 $attr = new Attribute($this, $key, null, $attribute->getRules());
                 $attr->setPrimaryAttribute($attribute);
@@ -238,7 +244,6 @@ class Validation
      *
      * @param string $attributeKey
      * @return array
-     * @throws TypeException
      */
     protected function initializeAttributeOnData(string $attributeKey): array
     {
@@ -261,7 +266,6 @@ class Validation
      * @param array $data
      * @param string $attributeKey
      * @return array
-     * @throws TypeException
      */
     public function extractValuesForWildcards(array $data, string $attributeKey): array
     {
@@ -270,6 +274,7 @@ class Validation
         $pattern = str_replace('\*', '[^\.]+', preg_quote($attributeKey));
 
         foreach ($data as $key => $value) {
+            $key = (string) $key;
             if ((bool) preg_match('/^' . $pattern . '/', $key, $matches)) {
                 $keys[] = $matches[0];
             }
@@ -308,15 +313,15 @@ class Validation
      *
      * @param string|null $attributeKey
      * @return array
-     * @throws TypeException
      */
     protected function extractDataFromPath(?string $attributeKey): array
     {
         $results = [];
+        $missing = new \stdClass();
 
-        $value = Helper::arrayGet($this->inputs, $attributeKey, '__missing__');
+        $value = Helper::arrayGet($this->inputs, $attributeKey, $missing);
 
-        if ($value != '__missing__') {
+        if ($value !== $missing) {
             Helper::arraySet($results, $attributeKey, $value);
         }
 
@@ -348,7 +353,7 @@ class Validation
     protected function isEmptyValue(mixed $value): bool
     {
         $requiredValidator = new Required();
-        return false === $requiredValidator->check($value, []);
+        return false === $requiredValidator->check($value);
     }
 
     /**
@@ -391,7 +396,7 @@ class Validation
      * @param Attribute $attribute
      * @param mixed $value
      * @param Rule $validator
-     * @return mixed
+     * @return string
      */
     protected function resolveMessage(Attribute $attribute, mixed $value, Rule $validator): string
     {
@@ -486,6 +491,10 @@ class Validation
             $rules = explode('|', $rules);
         }
 
+        if (!is_array($rules)) {
+            throw new Exception('Rules must be a string or an array.');
+        }
+
         $resolvedRules = [];
         $validatorFactory = $this->getValidator();
 
@@ -531,7 +540,7 @@ class Validation
         if ($rulename !== 'regex') {
             $params = isset($exp[1]) ? explode(',', $exp[1]) : [];
         } else {
-            $params = [$exp[1]];
+            $params = isset($exp[1]) ? [$exp[1]] : [];
         }
 
         return [$rulename, $params];
@@ -540,8 +549,8 @@ class Validation
     /**
      * Given $attributeKey and $alias then assign alias.
      *
-     * @param mixed $attributeKey
-     * @param mixed $alias
+     * @param string $attributeKey
+     * @param string $alias
      * @return void
      */
     public function setAlias(string $attributeKey, string $alias): void
@@ -552,7 +561,7 @@ class Validation
     /**
      * Get attribute alias from given key.
      *
-     * @param mixed $attributeKey
+     * @param string $attributeKey
      * @return string|null
      */
     public function getAlias(string $attributeKey): ?string
@@ -596,7 +605,6 @@ class Validation
      *
      * @param string $key
      * @return mixed
-     * @throws TypeException
      */
     public function getValue(string $key): mixed
     {
@@ -646,7 +654,7 @@ class Validation
     {
         $resolvedInputs = [];
         foreach ($inputs as $key => $rules) {
-            $exp = explode(':', (string) $key);
+            $exp = explode(':', (string) $key, 2);
 
             if (count($exp) > 1) {
                 // set attribute alias
@@ -666,7 +674,7 @@ class Validation
      */
     public function getValidatedData(): array
     {
-        return array_merge($this->validData, $this->invalidData);
+        return array_replace_recursive($this->validData, $this->invalidData);
     }
 
     /**
@@ -684,6 +692,7 @@ class Validation
             Helper::arrayUnset($this->invalidData, $key);
         } else {
             $this->validData[$key] = $value;
+            unset($this->invalidData[$key]);
         }
     }
 
@@ -712,6 +721,7 @@ class Validation
             Helper::arrayUnset($this->validData, $key);
         } else {
             $this->invalidData[$key] = $value;
+            unset($this->validData[$key]);
         }
     }
 

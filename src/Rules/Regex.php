@@ -24,6 +24,10 @@ class Regex extends Rule
     {
         $this->requireParameters($this->fillableParams);
         $regex = $this->parameter('regex');
-        return preg_match($regex, $value) > 0;
+        if (!is_string($regex) || (!is_string($value) && !is_numeric($value))) {
+            return false;
+        }
+
+        return @preg_match($regex, (string) $value) > 0;
     }
 }

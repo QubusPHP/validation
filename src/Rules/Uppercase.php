@@ -18,6 +18,11 @@ class Uppercase extends Rule
      */
     public function check(mixed $value): bool
     {
-        return mb_strtoupper($value, mb_detect_encoding($value)) === $value;
+        if (!is_string($value)) {
+            return false;
+        }
+
+        $encoding = mb_detect_encoding($value) ?: 'UTF-8';
+        return mb_strtoupper($value, $encoding) === $value;
     }
 }

@@ -11,8 +11,8 @@ trait MessagesAware
     /**
      * Given $key and $message to set message.
      *
-     * @param mixed $key
-     * @param mixed $message
+     * @param string $key
+     * @param string $message
      * @return void
      */
     public function setMessage(string $key, string $message): void

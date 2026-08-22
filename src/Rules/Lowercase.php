@@ -18,6 +18,11 @@ class Lowercase extends Rule
      */
     public function check(mixed $value): bool
     {
-        return mb_strtolower($value, mb_detect_encoding($value)) === $value;
+        if (!is_string($value)) {
+            return false;
+        }
+
+        $encoding = mb_detect_encoding($value) ?: 'UTF-8';
+        return mb_strtolower($value, $encoding) === $value;
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Qubus\Validation;
 
-class ErrorBag
+use Countable;
+
+class ErrorBag implements Countable
 {
     protected array $messages = [];
 
@@ -194,7 +196,7 @@ class ErrorBag
     /**
      * Check the $key is wildcard
      *
-     * @param mixed $key
+     * @param string $key
      * @return bool
      */
     protected function isWildcardKey(string $key): bool
@@ -215,6 +217,7 @@ class ErrorBag
         $pattern = preg_quote($key, '#');
         $pattern = str_replace('\*', '.*', $pattern);
 
+        $pattern = str_replace('.*\.', '[^.]+\.', $pattern);
         $filteredMessages = [];
 
         foreach ($messages as $k => $keyMessages) {
